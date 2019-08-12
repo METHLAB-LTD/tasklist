@@ -48,7 +48,15 @@ module.exports = async (options = {}) => {
 
 	const headers = options.verbose ? verboseHeaders : defaultHeaders;
 
-	const {stdout} = await execFile('tasklist', args);
+	let res;
+	let stdout = null;
+	try {
+		res = await execFile('tasklist', args);
+		stdout = res.stdout;
+	} catch (e) {
+		res = await execFile(process.env.windir + '\\system32\\tasklist', args);
+		stdout = res.stdout;
+	}
 
 	// Not start with `"` means no matching tasks. See #11.
 	const data = stdout.startsWith('"') ? await neatCsv(stdout, {headers}) : [];
