@@ -51,7 +51,7 @@ module.exports = async (options = {}) => {
 	let res;
 	let stdout = null;
 	try {
-		res = await execFile('tasklist', args);
+		res = await execFile('tasklist', args, {windowsHide: true});
 		stdout = res.stdout;
 	} catch (e) {
 		res = await execFile(process.env.windir + '\\system32\\tasklist', args);
